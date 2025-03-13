@@ -5,11 +5,13 @@ import com.example.Taskmanager.TaskManager.Model.TaskManagerModel;
 import com.example.Taskmanager.TaskManager.Service.TaskManagerService;
 import com.example.Taskmanager.TaskManager.TaskManagerDTO.TaskManagerDTO;
 
+import com.example.Taskmanager.TaskManager.TaskManagerDTO.TaskManagerDTOResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -33,8 +35,20 @@ public class TaskManagerController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<TaskManagerModel>> listTasks(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(taskManagerService.listTasks());
+    public ResponseEntity<List<TaskManagerDTOResponse>> listTasks(){
+        List<TaskManagerModel> listTasksModel = taskManagerService.listTasks();
+        List<TaskManagerDTOResponse> listTasksDTOResponse =  listTasksModel.stream()
+                .map(task -> new TaskManagerDTOResponse(
+                        task.getTitle(),
+                        task.getDescription(),
+                        task.getStatus(),
+                        task.getPriority()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(listTasksDTOResponse);
     }
+
+
 
 }
