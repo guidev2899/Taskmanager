@@ -1,6 +1,7 @@
 package com.example.Taskmanager.TaskManager.GlobalExceptionHandler;
 
 ;
+import com.example.Taskmanager.TaskManager.TaskException.NullTaskException;
 import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -16,20 +17,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleEnumConversionError(HttpMessageNotReadableException ex){
-        String messageError = "\"Invalid value for status ou priority. Use only os allowed values: \" +\n" +
-                "                \"Status: [PENDING, INPROGRESS, COMPLETED], \" +\n" +
-                "                \"Prioridade: [LOW, MEDIUM, HIGH].\"" +
-                "one value is Null";
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageError);
-    }
-
     @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<String> handleTaskNotFound(TaskNotFoundException ex){
-        String messageError = "Task com o ID informado não encontrado";
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageError);
+    public ResponseEntity<Map<String, String>> handleTaskNotFound(TaskNotFoundException ex){
+        Map<String, String> IdNotFound = new HashMap<>();
+        IdNotFound.put("Message",ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(IdNotFound);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -39,6 +31,24 @@ public class GlobalExceptionHandler {
                 errors.put(error.getField(), error.getDefaultMessage())
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(NullTaskException.class)
+    public ResponseEntity<Map<String, String>> handleNullTaskException(NullTaskException ex){
+        Map<String, String> nullErro = new HashMap<>();
+        nullErro.put("Message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(nullErro);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEnum(HttpMessageNotReadableException ex){
+        Map<String, String> error = new HashMap<>();
+        if(ex.getCause().getMessage().contains("TaskPriority")){
+            error.put("Message","Priority is not valid, please enter a priority from the List:[HIGH, LOW, MEDIUM");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+        error.put("message","Error in Json deserialization.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 }

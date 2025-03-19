@@ -6,15 +6,15 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record TaskManagerDTOEntry(
-        @NotBlank(message = "O Título não pode ser vazio")
-        @NotNull(message = "O Título não pode ser Nulo")
+        @NotBlank(message = "The Title can be not empty")
+        @NotNull(message = "The Title can be null")
         String title,
 
-        @NotBlank(message = "A descrição não pode ser vazio")
-        @NotNull(message = "O Título não pode ser Nulo")
+        @NotBlank(message = "The description can be not empty")
+        @NotNull(message = "The description can be not null")
         String description,
 
-        @NotNull(message = "A prioridade não pode ser vazio")
+        @NotNull(message = "The priority can be not null")
         TaskPriority priority) {
 
 
