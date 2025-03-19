@@ -3,7 +3,6 @@ package com.example.Taskmanager.TaskManager.Model;
 
 import com.example.Taskmanager.TaskManager.Model.Enum.TaskPriority;
 import com.example.Taskmanager.TaskManager.Model.Enum.TaskStatus;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity

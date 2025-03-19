@@ -2,9 +2,13 @@ package com.example.Taskmanager.TaskManager.Service;
 
 import com.example.Taskmanager.TaskManager.Model.TaskManagerModel;
 import com.example.Taskmanager.TaskManager.Repository.TaskManagerRepository;
+import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
+import com.example.Taskmanager.TaskManager.TaskManagerDTO.TaskManagerDTOResponse;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskManagerService {
@@ -24,6 +28,7 @@ public class TaskManagerService {
         return taskManagerRepository.findAll();
     }
 
-
-
+    public Optional<TaskManagerModel> getByIdTasks(Long id){
+        return taskManagerRepository.findById(id);
+    }
 }
