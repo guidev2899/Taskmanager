@@ -1,5 +1,7 @@
 package com.example.Taskmanager.TaskManager.Service;
 
+import com.example.Taskmanager.TaskManager.Model.Enum.TaskPriority;
+import com.example.Taskmanager.TaskManager.Model.Enum.TaskStatus;
 import com.example.Taskmanager.TaskManager.Model.TaskManagerModel;
 import com.example.Taskmanager.TaskManager.Repository.TaskManagerRepository;
 import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
@@ -31,4 +33,13 @@ public class TaskManagerService {
     public Optional<TaskManagerModel> getByIdTasks(Long id){
         return taskManagerRepository.findById(id);
     }
+
+    public List<TaskManagerModel> getByTaskForPriority(TaskPriority priority){
+        return taskManagerRepository.findBypriority(priority);
+    }
+
+    public List<TaskManagerModel> getByTaskForStatus(TaskStatus status){
+        return taskManagerRepository.findByStatus(status);
+    }
+
 }

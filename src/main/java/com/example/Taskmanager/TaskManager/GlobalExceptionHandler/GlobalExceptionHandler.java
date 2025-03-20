@@ -1,6 +1,7 @@
 package com.example.Taskmanager.TaskManager.GlobalExceptionHandler;
 
 ;
+import com.example.Taskmanager.TaskManager.TaskException.ListTaskNotFoundException;
 import com.example.Taskmanager.TaskManager.TaskException.NullTaskException;
 import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -10,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,20 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         error.put("message","Error in Json deserialization.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ListTaskNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFoundListTasksForPriority(ListTaskNotFoundException ex){
+        Map<String,String> error = new HashMap<>();
+        error.put("Message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentType(MethodArgumentTypeMismatchException ex){
+        Map<String,String> error = new HashMap<>();
+        error.put("Message", "Priority type is not valid, please enter valid priority");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
