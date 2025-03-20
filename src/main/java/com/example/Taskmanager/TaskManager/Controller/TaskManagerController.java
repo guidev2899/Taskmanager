@@ -63,7 +63,7 @@ public class TaskManagerController {
     public ResponseEntity<List<TaskManagerDTOResponse>> foundTaskForPriority(@RequestParam(name = "priority") TaskPriority priority){
         List<TaskManagerModel> tasksModels = taskManagerService.getByTaskForPriority(priority);
         if(tasksModels.isEmpty()){
-            throw new ListTaskNotFoundException();
+            throw new ListTaskNotFoundException("Nothing tasks found with priority information");
         }
         List<TaskManagerDTOResponse> tasksDTOResponse = tasksModels.stream()
                 .map(TaskMapper::toResponse)
@@ -75,6 +75,9 @@ public class TaskManagerController {
     @GetMapping("/status")
     public ResponseEntity<List<TaskManagerDTOResponse>> foundTaskForStatus(@RequestParam(name = "status")TaskStatus status){
         List<TaskManagerModel> tasksModels = taskManagerService.getByTaskForStatus(status);
+        if(tasksModels.isEmpty()){
+            throw new ListTaskNotFoundException("Nothing tasks found with status information");
+        }
         List<TaskManagerDTOResponse> tasksResponse = tasksModels.stream()
                 .map(TaskMapper::toResponse)
                 .collect(Collectors.toList());

@@ -63,6 +63,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentType(MethodArgumentTypeMismatchException ex){
         Map<String,String> error = new HashMap<>();
+        if(ex.getCause().getMessage().contains("TaskStatus")){
+            error.put("Message", "Status type is not valid, please enter valid Status");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
         error.put("Message", "Priority type is not valid, please enter valid priority");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
