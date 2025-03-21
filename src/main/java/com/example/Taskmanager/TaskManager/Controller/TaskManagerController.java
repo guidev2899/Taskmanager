@@ -92,7 +92,7 @@ public class TaskManagerController {
     public ResponseEntity<Map<String, String>> deleteTaskForId(@RequestParam(name = "id") Long id){
         Map<String, String> deletado = new HashMap<>();
         Boolean existsId = taskManagerService.VerifyIdExist(id);
-        if(existsId == false){
+        if(!existsId){
             deletado.put("Message","Task with Id " + id + " Not Found");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(deletado);
         }
@@ -104,10 +104,8 @@ public class TaskManagerController {
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> updateTasks(@PathVariable Long id, @RequestBody TaskDtoUpdateEntry taskDtoUpdateEntry){
         Map<String, String> mapResponse = new HashMap<>();
-        Optional<TaskManagerModel> taskFound = taskManagerService.getByIdTasks(id);
-        if(taskFound.isEmpty()){
-            throw new TaskNotFoundException(id);
-        }
+        TaskManagerModel taskFound = taskManagerService.getByIdTasks(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
         TaskManagerModel taskManagerModel = taskFound.get();
         TaskManagerModel taskUpdated = UpdateTask.updateTask(taskDtoUpdateEntry, taskManagerModel);
         taskManagerService.createTask(taskUpdated);

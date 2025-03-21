@@ -72,4 +72,8 @@ public class TaskManagerModel {
     public void setPriority(TaskPriority priority) {
         this.priority = priority;
     }
+
+    public TaskManagerModel get() {
+        return null;
+    }
 }
