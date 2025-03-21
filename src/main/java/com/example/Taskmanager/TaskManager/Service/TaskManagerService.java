@@ -4,11 +4,9 @@ import com.example.Taskmanager.TaskManager.Model.Enum.TaskPriority;
 import com.example.Taskmanager.TaskManager.Model.Enum.TaskStatus;
 import com.example.Taskmanager.TaskManager.Model.TaskManagerModel;
 import com.example.Taskmanager.TaskManager.Repository.TaskManagerRepository;
-import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
-import com.example.Taskmanager.TaskManager.TaskManagerDTO.TaskManagerDTOResponse;
+import com.example.Taskmanager.TaskManager.TaskManagerDTO.TaskDtoUpdateEntry;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +38,14 @@ public class TaskManagerService {
 
     public List<TaskManagerModel> getByTaskForStatus(TaskStatus status){
         return taskManagerRepository.findByStatus(status);
+    }
+
+    public void deleteTaskForId(Long id){
+        taskManagerRepository.deleteById(id);
+    }
+
+    public Boolean VerifyIdExist(Long id){
+        return taskManagerRepository.existsById(id);
     }
 
 }

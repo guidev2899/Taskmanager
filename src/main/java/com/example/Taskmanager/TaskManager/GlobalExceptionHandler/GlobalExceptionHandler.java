@@ -3,6 +3,7 @@ package com.example.Taskmanager.TaskManager.GlobalExceptionHandler;
 ;
 import com.example.Taskmanager.TaskManager.TaskException.ListTaskNotFoundException;
 import com.example.Taskmanager.TaskManager.TaskException.NullTaskException;
+import com.example.Taskmanager.TaskManager.TaskException.StatusNotValidException;
 import com.example.Taskmanager.TaskManager.TaskException.TaskNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -68,6 +69,13 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         error.put("Message", "Priority type is not valid, please enter valid priority");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(StatusNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleStatusNotValid(StatusNotValidException ex){
+        Map<String,String> error = new HashMap<>();
+        error.put("Message",ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
